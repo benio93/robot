@@ -15,15 +15,26 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    w_state = ""
     keys_pressed = pygame.key.get_pressed()
 
-    # Check if the W key is pressed
-    if keys_pressed[pygame.K_w]:
-        w_state = "W"
-    else:
-        w_state = "X"
-    ser.write(w_state.encode('utf-8'))
-   # print(w_state)
+    w_state = "W" if keys_pressed[pygame.K_w] else "X"
+    s_state = "S" if keys_pressed[pygame.K_s] else "X"
+    a_state = "A" if keys_pressed[pygame.K_a] else "X"
+    d_state = "D" if keys_pressed[pygame.K_d] else "X"
+
+    # Generate valid combinations
+    valid_combinations = [
+        combination
+        for combination in [w_state, s_state, a_state, d_state]
+        if combination != ""
+    ]
+
+    # Combine and sort states
+    combined_state = ''.join(sorted(valid_combinations))
+    print(combined_state)
+    
+    ser.write(combined_state.encode('utf-8'))
+
+    # Read and print the response
     line = ser.readline().decode('utf-8').rstrip()
     print(line)
