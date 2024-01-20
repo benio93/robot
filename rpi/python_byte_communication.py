@@ -2,6 +2,12 @@ import pygame
 import serial
 import struct
 
+import subprocess
+#with open('/home/pi/Desktop/camerastream.py') as file:
+ #   exec(file.read())
+
+subprocess.run(['python','/home/pi/Desktop/camerastream.py'])
+
 # Initialize Pygame
 pygame.init()
 screen = pygame.display.set_mode((400, 400))
@@ -26,6 +32,9 @@ while running:
     command_byte |= keys_pressed[pygame.K_a] << 1  # Set bit 1 if 'A' is pressed
     command_byte |= keys_pressed[pygame.K_s] << 2  # Set bit 2 if 'S' is pressed
     command_byte |= keys_pressed[pygame.K_d] << 3  # Set bit 3 if 'D' is pressed
+    command_byte |= keys_pressed[pygame.K_RIGHT] << 4  # Set bit 4 if 'arrow right' is pressed
+    command_byte |= keys_pressed[pygame.K_LEFT] << 5  # Set bit 5 if 'arrow left' is pressed
+    
     # You can add more keys here following the same pattern
 
     # Print the binary representation
@@ -35,6 +44,8 @@ while running:
 
     # Send the command byte
     ser.write(bytes([command_byte]))
+    
+    
 
     # Read and print the response (optional)
     #line = ser.readline()#.decode('utf-8').rstrip()
